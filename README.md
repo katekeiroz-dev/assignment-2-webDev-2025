@@ -1,6 +1,4 @@
-# Dotify
 
-A web client for our music streaming service.
 
 ## Getting Started
 
