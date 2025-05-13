@@ -13,14 +13,17 @@ window.weatherApp.components.createCardsItem = (cities) => {
           </figure>
         </div>
         <article class="card-content">
-          <p class="content is-size-4">
+          <p class="content is-size-5">
             ${cities.description}
           </p>
         </article>
-        <footer class="card-footer">
-          <button class="card-footer-item button has-background-grey-lighter">Play</button>
-          <button class="card-footer-item button has-background-grey-lighter">Open</button>
-          <button class="card-footer-item button has-background-grey-lighter">Remove</button>
+        <footer class="card-footer has-background-black">
+        <br><br>
+         <p class="card-footer-item has-text-white">
+         <i class="fa-solid fa-minus"></i>  Min 0.9 °C</p>
+            <br>
+                <p class="card-footer-item has-text-white"><i class="fa-solid fa-plus"></i>  Max 8 °C</p>
+                <br><br>
         </footer>
       </section>
     </div>`
