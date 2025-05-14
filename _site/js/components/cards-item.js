@@ -24,7 +24,9 @@ window.weatherApp.components.createCardsItem = (cities) => {
             <br>
                 <p class="card-footer-item has-text-white"><i class="fa-solid fa-plus"></i>  Max 8 °C</p>
                 <br><br>
+                
         </footer>
+        <a href="/cities/?name=${cities.name}" class="has-text-black"> Dashboard </a>
       </section>
     </div>`
 }
