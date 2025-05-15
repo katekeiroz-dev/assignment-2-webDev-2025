@@ -7,11 +7,19 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
+  <script src="https://kit.fontawesome.com/b897380ebc.js" crossorigin="anonymous"></script>
   <script src="/js/weatherApp.js"></script>  
   <script src="/js/components/cards-item.js"></script>
   <script src="/js/components/cards-infos.js"></script>
     <script src="/js/components/localweather.js"></script>
   <script src="/js/data-store.js"></script> 
+  <script src="/js/lab_weather_data.js"></script> 
+   <script src="/js/components/utils.js"></script>
+  <script src="/js/pages/settings.js"></script> 
+  <script src="/js/components/weather_data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+ 
+
   <script src="/js/bulma.js"></script>
   {% if script %}
     <script src="{{ script }}"></script>
@@ -22,11 +30,19 @@
   {% include "nav.njk" %}
   {% include "header.njk" %}
     {{ content | safe }}
-  
-  <main class="columns is-half rainyis-multiline box has-background-light is-centered">
-    
- </main>
+  <div class="has-text-centered mb-5 mt-4">
+        <h1 class="title is-size-3 has-text-weight-bold">Today's Forecast</h1>
+        <p id="clock" class="is-size-5 has-text-weight-semibold has-text-link-dark mb-3">
+          <!-- Hora atual será inserida aqui -->
+        </p>
+      </div>
+  <main class="columns is-half rainyis-multiline box has-background-light is-centered">   
+    <div id="cityCardsContainer">
+
+    </div>
+  </main>
  {% include "footer.njk" %}
+
 </body>
 </html>
 

@@ -1,4 +1,4 @@
-window.weatherApp.components.createCardsInfos = (songs = []) => {
+window.weatherApp.components.createPlaylistList = (songs = []) => {
     console.log('songs', songs);
     const songsToRows = songs.map(song => {
         console.log('song', song);
