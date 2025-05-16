@@ -1,4 +1,4 @@
-weatherApp.dataStore.data = [
+ weatherApp.dataStore.data = [
     {
         name: "Berlin",
         description: "Rainnig day",
@@ -32,8 +32,8 @@ weatherApp.dataStore.data = [
     },
   
      
-]
+] 
 
-weatherApp.dataStore.list = () => {
+ weatherApp.dataStore.list = () => {
     return weatherApp.dataStore.data
-}
+} 
