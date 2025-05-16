@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async() => {
           main.innerHTML = main.innerHTML + weatherApp.components.createCardsItem(cities)
         });
 
-        main.innerHTML = main.innerHTML + await weatherApp.components.displayCurrentweather();
+        
 
 });
+

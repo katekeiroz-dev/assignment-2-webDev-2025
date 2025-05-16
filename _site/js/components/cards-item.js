@@ -20,7 +20,7 @@ window.weatherApp.components.createCardsItem = (cities) => {
         <footer class="card-footer has-background-black">
         <br><br>
          <p class="card-footer-item has-text-white">
-         <i class="fa-solid fa-minus"></i>  Min sdsdsdsdsdsds0.9 °C</p>
+         <i class="fa-solid fa-minus"></i>  Min 0.9 °C</p>
             <br>
                 <p class="card-footer-item has-text-white"><i class="fa-solid fa-plus"></i>  Max 8 °C</p>
                 <br><br>

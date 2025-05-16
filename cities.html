@@ -3,5 +3,35 @@ layout: layout.njk
 title: Cities
 script: /js/pages/cities.js
 ---
+ <main class="columns  box has-background-light is-centered">  
+    <div class="column-item  has-text-centered">
+         <h1 id="page-heading" class="title has-text-centered has-text-dark">City Name</h1>
+         <h2 id="cityTitle" class="subtitle has-text-centered pt-2">City Focus</h2>
+        <img id="cityImg" src="/images/rainyDay.png" class="">
+        <p id="weatherDesc"class="title is-4">The weather today is:</p>
+    </div>  
+
+
+   <div id="page-heading" class="column is-3 is-centered is-vcentered"></div>
+     <section class="is-centered is-vcentered title is-4">
+        <br>    <br>    <br>    <br>
+  
+    <p id="maxTemp"><i class="fa-solid fa-temperature-three-quarters"></i> Max Temperature:</p><br>
+    <p id="maxWind"><i class="fa-solid fa-wind"></i> Max Wind Speed:</p><br>
+    <p id="hourWind"><i class="fa-solid fa-gauge-simple"></i> Wind Now:</p><br>
+    <p id="currentTime"><i class="fa-solid fa-clock"></i> Current Time:</p><br>
+  </section>
+
+  <section>
+    <div class="columns">
+    <p>7 Day Forecast</p>
+    <ul id="sevenDaySummary"></ul>
+  </section>
+  </div>
+
+
+    <!-- Weather cards will be injected here -->
+  </main>
+ 
 
 <!-- Currently all content is dynamic but you can add content here to save on javascript -->

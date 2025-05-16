@@ -1,77 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Data</title>
-    <script src="lab_weather_data.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const currentCity = urlParams.get('city');
-            const dailyData = weatherData[currentCity + "_daily"].daily
-            const hourlyData = weatherData[currentCity + "_hourly"].hourly
-
-            let weather = 'Unknown'
-            const weatherCode = dailyData.weather_code[0];
-            if(weatherCode === 0){
-                weather = "Clear Sky"; // or weatherImage = /images/weatherIcons/clearsky.png
-            } else if(weatherCode >= 1 && weatherCode <= 3){
-                weather = "Overcast"; // or weatherImage = /images/weatherIcons/overcast.png
-            }
-
-            const weatherCodeTodayElement = document.getElementById("weatherCodeToday");
-            const weatherTodayElement = document.getElementById("weatherToday");
-            const weatherCodeTomorrowElement = document.getElementById("weatherCodeTomorrow");
-
-            weatherCodeTodayElement.innerHTML = weatherCode;
-            weatherTodayElement.innerHTML = weather;
-            weatherCodeTomorrowElement.innerHTML = dailyData.weather_code[1];
-
-            const now = dayjs(); // create a new date object that represents this time
-            const currentHour = now.hour(); // 0 - 23 as a number
-
-            // we need the index of the current hour in the time array
-            // we then use that index to query the termperature_2m data
-            const indexOfCurrentHour = hourlyData.time.indexOf(`TodayT${currentHour}:00`);
-            const indexOfCurrentHourTomorrow = hourlyData.time.indexOf(`Today+1T${currentHour}:00`);
-            console.log(`The index of the current hour is : ${indexOfCurrentHour}`);
-            console.log(`The index of the current hour tomorrow is : ${indexOfCurrentHourTomorrow}`);
-
-            const timeElement = document.getElementById("time");
-            const tempElement = document.getElementById("temp");
-
-            const tempTomorrowElement = document.getElementById("tempTomorrow");
-            const dayAfterTomorrowElement = document.getElementById("dayAfterTomorrow");
-
-            const dayElement = document.getElementById("day");
-            const tomorrowElement = document.getElementById("tomorrow");
-
-            timeElement.innerHTML = `${currentHour}:00`;
-            dayElement.innerHTML = now.format("dddd");
-            tomorrowElement.innerHTML = now.add(1, 'day').format("dddd");
-            dayAfterTomorrowElement.innerHTML = now.add(2, 'day').format("dddd");
-
-            tempElement.innerHTML = hourlyData.temperature_2m[indexOfCurrentHour];
-            tempTomorrowElement.innerHTML = hourlyData.temperature_2m[indexOfCurrentHourTomorrow];
-
-            const todayMaxTemp = dailyData.temperature_2m_max[0];
-            const maxTempElement = document.getElementById("maxTemp");
-            maxTempElement.innerHTML = todayMaxTemp;
-        });
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <style>
+    body {
+      background-color: #f5f5f5;
+    }
+    .weather-box {
+      margin-bottom: 1rem;
+    }
+  </style>
 </head>
 <body>
-    <p>The day today is <span id="day"></span></p>
-    <p>The day tomorrow is <span id="tomorrow"></span></p>
-    <p>The day after tomorrow is <span id="dayAfterTomorrow"></span></p>
-    <p>The weather code for today is <span id="weatherCodeToday"></span></p>
-    <p>The weather for today is <span id="weatherToday"></span></p>
-    <p>The weather code for tomorrow is <span id="weatherCodeTomorrow"></span></p>
-    <p>The current hour is <span id="time"></span></p>
-    <p>The current temp is <span id="temp"></span></p>
-    <p>The mex temp is for today is <span id="maxTemp"></span></p>
-    <p>The temp at the same time tomorrow is <span id="tempTomorrow"></span></p>
+  <section class="section pt-6">
+    <div class="container">
+      <h1 id="page-heading" class="title has-text-centered">City Name</h1>
+      <h2 id="cityTitle" class="subtitle has-text-centered pt-2">City Focus</h2>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="container">
+      <div class="box">
+        <p id="weatherDesc" class="mb-2">Weather:</p>
+        <p id="maxTemp" class="mb-2">Max Temperature:</p>
+        <p id="maxWind" class="mb-2">Max Wind Speed:</p>
+        <p id="hourTemp" class="mb-2">Temperature Now:</p>
+        <p id="hourWind" class="mb-2">Wind Now:</p>
+        <p id="currentTime" class="mb-2">Current Time:</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-0">
+    <div class="container">
+      <h3 class="title is-4">7 Day Forecast</h3>
+      <ul id="sevenDaySummary" class="content"></ul>
+    </div>
+  </section>
+
+  <main class="section pt-0">
+    <div class="container">
+      <!-- Dynamic city cards will be appended here -->
+    </div>
+  </main>
+
+  <script>
+    // Your full JS code here — both scripts you posted
+    // Paste your entire script content below...
+    
+    const weatherDescriptions = {
+      0: "Clear sky",
+      1: "Mainly clear",
+      2: "Partly cloudy",
+      3: "Overcast",
+      51: "Light drizzle",
+      61: "Rain showers",
+      80: "Rainy",
+      71: "Snow",
+    };
+
+    function getCityFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("city")?.toLowerCase();
+    }
+
+    function updateCurrentTime() {
+      const now = dayjs();
+      const formattedTime = now.format("HH:mm");
+      document.getElementById("currentTime").textContent = `Current Time: ${formattedTime}`;
+      return now.hour();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const citiesName = urlParams.get('name');
+      const cities = weatherApp.dataStore.list().find(item => item.name === citiesName);
+
+      if (cities) {
+        document.getElementById('page-heading').textContent = cities.name;
+        const main = document.querySelector('main .container');
+        main.innerHTML += weatherApp.components.createCardsItem(cities);
+        main.innerHTML += weatherApp.components.createCardsInfos(cities.cities);
+      }
+
+      const city = getCityFromURL();
+      if (!city) {
+        alert("No city provided in URL.");
+        return;
+      }
+
+      document.getElementById("cityTitle").textContent = `City Focus: ${city.charAt(0).toUpperCase() + city.slice(1)}`;
+
+      const daily = weatherData[city + "_daily"].daily;
+      const hourly = weatherData[city + "_hourly"].hourly;
+
+      const weatherCode = daily.weather_code[0];
+      const maxTemp = daily.temperature_2m_max[0];
+      const maxWind = daily.wind_speed_10m_max[0];
+      document.getElementById("weatherDesc").textContent = `Weather: ${weatherDescriptions[weatherCode] || 'Unknown'}`;
+      document.getElementById("maxTemp").textContent = `Max Temperature: ${maxTemp}°C`;
+      document.getElementById("maxWind").textContent = `Max Wind Speed: ${maxWind} km/h`;
+
+      const hourIndex = updateCurrentTime();
+      const tempNow = hourly.temperature_2m[hourIndex];
+      const windNow = hourly.wind_speed_10m[hourIndex];
+      document.getElementById("hourTemp").textContent = `Temperature Now: ${tempNow}°C`;
+      document.getElementById("hourWind").textContent = `Wind Now: ${windNow} km/h`;
+
+      const list = document.getElementById("sevenDaySummary");
+      const now = dayjs();
+
+      for (let i = 0; i < daily.weather_code.length; i++) {
+        const item = document.createElement("li");
+        const desc = weatherDescriptions[daily.weather_code[i]] || `Code ${daily.weather_code[i]}`;
+        const dayName = i === 0 ? "Today" : i === 1 ? "Tomorrow" : now.add(i, 'day').format("dddd");
+        item.textContent = `${dayName}: ${desc}`;
+        list.appendChild(item);
+      }
+    });
+  </script>
 </body>
 </html>

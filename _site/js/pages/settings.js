@@ -1,66 +1,71 @@
- // generate the cards of the favorite cities
+   
+    const weatherDescriptions = {
+      0: "Clear sky",
+      1: "Mainly clear",
+      2: "Partly cloudy",
+      3: "Overcast",
+      51: "Light drizzle",
+      61: "Rain showers",
+      80: "Rainy",
+      71: "Snow",
+    };
 
- PREFERENCESSSSSSSSSS
-      document.addEventListener('DOMContentLoaded', () => {
-      const favoriteCities = JSON.parse(localStorage.getItem('favoriteCities') || '[]');
-      const container = document.getElementById('cityCardsContainer');
+    function getCityFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("city")?.toLowerCase();
+    }
 
-      if (favoriteCities.length > 0) {
-        favoriteCities.forEach(city => {
-          const cityKey = city.toLowerCase();
-          const daily = weatherData[cityKey + '_daily']?.daily;
-
-          let tempMax = 'N/A';
-          let tempMin = 'N/A';
-
-          if (daily) {
-            tempMax = daily.temperature_2m_max[0];
-            tempMin = daily.temperature_2m_min[0];
-          }
-
-          const cityCard = document.createElement('div');
-          cityCard.classList.add('column', 'is-one-third');
-          cityCard.innerHTML = `
-          <div class="card" data-city="${city}" onclick="window.location.href='/cityfocus/?city=${city}';">
-  <header class="card-header">
-      <p class="card-header-title is-flex is-justify-content-center"">
-        ${city}
-      </p>
-    </header>
-
-    <article class="card-content">
-      <div class="columns is-mobile is-centered has-text-centered">
-        <div class="column">
-          <p class="is-size-4">${tempMin}°C</p>
-          <p class="is-size-7 has-text-grey">Min</p>
-        </div>
-        <div class="column">
-          <p class="is-size-4">${tempMax}°C</p>
-          <p class="is-size-7 has-text-grey">Max</p>
-        </div>
-      </div>
-    </article>
-
-    <footer class="card-footer">
-      <a class="card-footer-item">More Info</a>
-    </footer>
-  </section>
-        `;
-          container.appendChild(cityCard);
-        });
-      } else {
-        container.innerHTML = '<p class="has-text-centered">No favorite cities selected. Go to Preferences to select some cities.</p>';
-      }
-    });
-
-
-    function updateClock() {
+    function updateCurrentTime() {
       const now = dayjs();
-      const formatted = now.format("dddd, D MMMM YYYY - HH:mm");
-      document.getElementById("clock").textContent = formatted;
+      const formattedTime = now.format("HH:mm");
+      document.getElementById("currentTime").textContent = `Current Time: ${formattedTime}`;
+      return now.hour();
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      updateClock(); // mostra imediatamente
-      setInterval(updateClock, 60000); // atualiza a cada 60 segundos
+      const urlParams = new URLSearchParams(window.location.search);
+      const citiesName = urlParams.get('name');
+      const cities = weatherApp.dataStore.list().find(item => item.name === citiesName);
+
+      if (cities) {
+        document.getElementById('page-heading').textContent = cities.name;
+        const main = document.querySelector('main .container');
+        main.innerHTML += weatherApp.components.createCardsItem(cities);
+        main.innerHTML += weatherApp.components.createCardsInfos(cities.cities);
+      }
+
+      const city = getCityFromURL();
+      if (!city) {
+        alert("No city provided in URL.");
+        return;
+      }
+
+      document.getElementById("cityTitle").textContent = `City Focus: ${city.charAt(0).toUpperCase() + city.slice(1)}`;
+
+      const daily = weatherData[city + "_daily"].daily;
+      const hourly = weatherData[city + "_hourly"].hourly;
+
+      const weatherCode = daily.weather_code[0];
+      const maxTemp = daily.temperature_2m_max[0];
+      const maxWind = daily.wind_speed_10m_max[0];
+      document.getElementById("weatherDesc").textContent = `Weather: ${weatherDescriptions[weatherCode] || 'Unknown'}`;
+      document.getElementById("maxTemp").textContent = `Max Temperature: ${maxTemp}°C`;
+      document.getElementById("maxWind").textContent = `Max Wind Speed: ${maxWind} km/h`;
+
+      const hourIndex = updateCurrentTime();
+      const tempNow = hourly.temperature_2m[hourIndex];
+      const windNow = hourly.wind_speed_10m[hourIndex];
+      document.getElementById("hourTemp").textContent = `Temperature Now: ${tempNow}°C`;
+      document.getElementById("hourWind").textContent = `Wind Now: ${windNow} km/h`;
+
+      const list = document.getElementById("sevenDaySummary");
+      const now = dayjs();
+
+      for (let i = 0; i < daily.weather_code.length; i++) {
+        const item = document.createElement("li");
+        const desc = weatherDescriptions[daily.weather_code[i]] || `Code ${daily.weather_code[i]}`;
+        const dayName = i === 0 ? "Today" : i === 1 ? "Tomorrow" : now.add(i, 'day').format("dddd");
+        item.textContent = `${dayName}: ${desc}`;
+        list.appendChild(item);
+      }
     });
