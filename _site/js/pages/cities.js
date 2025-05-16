@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const citiesName = urlParams.get('name');
@@ -8,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const main = document.querySelector('main');
     main.innerHTML = main.innerHTML + weatherApp.components.createCardsItem(cities);
     main.innerHTML = main.innerHTML + weatherApp.components.createCardsInfos (cities.cities);
+
+ 
 });
 
 const weatherDescriptions = {
@@ -43,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const main = document.querySelector("main .container");
     main.innerHTML += weatherApp.components.createCardsItem(cities);
     main.innerHTML += weatherApp.components.createCardsInfos(cities.cities);
-  }
+  } 
 
   const city = getCityFromURL();
   if (!city) {
@@ -71,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("hourTemp").textContent = `Temperature Now: ${tempNow}°C`;
   document.getElementById("hourWind").textContent = `Wind Now: ${windNow} km/h`;
 
+//7 days weather
   const list = document.getElementById("sevenDaySummary");
   const now = dayjs();
 

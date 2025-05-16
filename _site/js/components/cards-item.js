@@ -1,6 +1,6 @@
 window.weatherApp.components.createCardsItem = (cities) => {
     return `
-    <div class="column is-2">
+    <div class="column  is-2">
       <section class="card has-text-centered">
         <header class="card-header">
           <p class="card-header-title is-size-4 is-centered">
@@ -31,9 +31,11 @@ window.weatherApp.components.createCardsItem = (cities) => {
                 <br><br>
                 
         </footer>
-        <div class="has-background-dark mt-1 is-3 has-border">
+        <div class="has-background-black mt-1 is-3 has-border">
         <a href="/cities/?name=${cities.name}" class="has-text-white pt-5 is-size-5 "> Check out more </a>
         </div>
       </section>
-    </div>`
+    </div>
+   `
+    
 }

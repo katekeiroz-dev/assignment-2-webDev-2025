@@ -28,8 +28,5 @@ const cityForm = document.getElementById('cities-form');
       localStorage.setItem('displayPreferences', JSON.stringify(selectedPrefs));
       alert('Display preferences saved!');
 
-      function resetFavoriteCities(event){
-    localStorage.removeItem("favoriteCities");
-    location.reload();// refresh the page
-}
+
     });
