@@ -1,11 +1,16 @@
 window.weatherApp.components.createCardsItem = (cities) => {
     return `
-    <div class="column is-1">
+    <div class="column is-3">
       <section class="card has-text-centered">
         <header class="card-header">
           <p class="card-header-title is-size-4 is-centered">
             ${cities.name}
           </p>
+          <button class="card-header-icon">
+          <span class="icon">
+            <i id="fave-${cities.name}" class="fa-regular fa-heart"></i>
+          </span>
+        </button>
         </header>
         <div class="card-image">
           <figure class="image">
