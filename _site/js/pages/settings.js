@@ -1,71 +1,35 @@
-   
-    const weatherDescriptions = {
-      0: "Clear sky",
-      1: "Mainly clear",
-      2: "Partly cloudy",
-      3: "Overcast",
-      51: "Light drizzle",
-      61: "Rain showers",
-      80: "Rainy",
-      71: "Snow",
-    };
+const cityForm = document.getElementById('cities-form');
+    const preferencesForm = document.getElementById('preferences-form');
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedCities = JSON.parse(localStorage.getItem('favoriteCities') || '[]');
+      savedCities.forEach(city => {
+        const checkbox = document.querySelector(`input[name="favoriteCities"][value="${city}"]`);
+        if (checkbox) checkbox.checked = true;
+      });
+  
+      const savedPrefs = JSON.parse(localStorage.getItem('displayPreferences') || '[]');
+      savedPrefs.forEach(pref => {
+        const checkbox = document.querySelector(`input[name="displayPreferences"][value="${pref}"]`);
+        if (checkbox) checkbox.checked = true;
+      });
+    });
+  
+    cityForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const selectedCities = Array.from(document.querySelectorAll('input[name="favoriteCities"]:checked')).map(el => el.value);
+      localStorage.setItem('favoriteCities', JSON.stringify(selectedCities));
+      alert('Favorite cities saved!');
+    });
+  
+    preferencesForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const selectedPrefs = Array.from(document.querySelectorAll('input[name="displayPreferences"]:checked')).map(el => el.value);
+      localStorage.setItem('displayPreferences', JSON.stringify(selectedPrefs));
+      alert('Display preferences saved!');
 
-    function getCityFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("city")?.toLowerCase();
-    }
-
-    function updateCurrentTime() {
-      const now = dayjs();
-      const formattedTime = now.format("HH:mm");
-      document.getElementById("currentTime").textContent = `Current Time: ${formattedTime}`;
-      return now.hour();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const citiesName = urlParams.get('name');
-      const cities = weatherApp.dataStore.list().find(item => item.name === citiesName);
-
-      if (cities) {
-        document.getElementById('page-heading').textContent = cities.name;
-        const main = document.querySelector('main .container');
-        main.innerHTML += weatherApp.components.createCardsItem(cities);
-        main.innerHTML += weatherApp.components.createCardsInfos(cities.cities);
-      }
-
-      const city = getCityFromURL();
-      if (!city) {
-        alert("No city provided in URL.");
-        return;
-      }
-
-      document.getElementById("cityTitle").textContent = `City Focus: ${city.charAt(0).toUpperCase() + city.slice(1)}`;
-
-      const daily = weatherData[city + "_daily"].daily;
-      const hourly = weatherData[city + "_hourly"].hourly;
-
-      const weatherCode = daily.weather_code[0];
-      const maxTemp = daily.temperature_2m_max[0];
-      const maxWind = daily.wind_speed_10m_max[0];
-      document.getElementById("weatherDesc").textContent = `Weather: ${weatherDescriptions[weatherCode] || 'Unknown'}`;
-      document.getElementById("maxTemp").textContent = `Max Temperature: ${maxTemp}°C`;
-      document.getElementById("maxWind").textContent = `Max Wind Speed: ${maxWind} km/h`;
-
-      const hourIndex = updateCurrentTime();
-      const tempNow = hourly.temperature_2m[hourIndex];
-      const windNow = hourly.wind_speed_10m[hourIndex];
-      document.getElementById("hourTemp").textContent = `Temperature Now: ${tempNow}°C`;
-      document.getElementById("hourWind").textContent = `Wind Now: ${windNow} km/h`;
-
-      const list = document.getElementById("sevenDaySummary");
-      const now = dayjs();
-
-      for (let i = 0; i < daily.weather_code.length; i++) {
-        const item = document.createElement("li");
-        const desc = weatherDescriptions[daily.weather_code[i]] || `Code ${daily.weather_code[i]}`;
-        const dayName = i === 0 ? "Today" : i === 1 ? "Tomorrow" : now.add(i, 'day').format("dddd");
-        item.textContent = `${dayName}: ${desc}`;
-        list.appendChild(item);
-      }
+      function resetFavoriteCities(event){
+    localStorage.removeItem("favoriteCities");
+    location.reload();// refresh the page
+}
     });

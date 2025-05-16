@@ -4,13 +4,7 @@ title: Cities
 script: /js/pages/cities.js
 ---
  <main class="columns  box has-background-light is-centered">  
-    <div class="column-item  has-text-centered">
-         <h1 id="page-heading" class="title has-text-centered has-text-dark">City Name</h1>
-         <h2 id="cityTitle" class="subtitle has-text-centered pt-2">City Focus</h2>
-        <img id="cityImg" src="/images/rainyDay.png" class="">
-        <p id="weatherDesc"class="title is-4">The weather today is:</p>
-        <p id="currentTime"></p>
-        <p id="hourTemp">k</p>
+  
     </div>  
 
 
@@ -30,11 +24,17 @@ script: /js/pages/cities.js
 
     <!-- Weather cards will be injected here -->
   </main>
-   <section>
-    <div class="columns">
-    <p> 7sssssss Day Forecast</p>
-    <ul id="sevenDaySummary"></ul>
-  </section>
+ <section class="card">
+        <header class="card-header">
+          <p class="card-header-title is-justify-content-center is-flex-grow-1 has-text-centered">
+            7-Day Summary
+          </p>
+        </header>
+        <div class="card-content">
+          <ul id="sevenDaySummary" class="has-text-centered"></ul>
+        </div>
+      </section>
+
  
 
 <!-- Currently all content is dynamic but you can add content here to save on javascript -->
